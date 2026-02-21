@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 9D | GIS</title>
+   
+   
+
+   
+  <meta name="google-site-verification" content="dEsYbcIyNfcpQxDgTQaH1Galdp8RIiMP0wP4SvBTq0I" />
+   
+    
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* -----------------------------------------------------------
+           1. LOVABLE THEME (Midnight & Gold)
+           ----------------------------------------------------------- */
+        :root {
+            --bg-deep: #0f0c29;
+            --bg-gradient: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            
+            --gold: #ffd700;
+            --gold-glow: #ffaa00;
+            --rose: #f43f5e;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-white: #ffffff;
+            --text-soft: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-white);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND ATMOSPHERE */
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 50px 50px, #fff, transparent),
+                radial-gradient(2px 2px at 100px 150px, #fff, transparent),
+                radial-gradient(1.5px 1.5px at 200px 50px, #ffd700, transparent),
+                radial-gradient(2px 2px at 300px 250px, #fff, transparent);
+            background-size: 550px 550px;
+            animation: twinkle 4s ease-in-out infinite alternate;
+            opacity: 0.6;
+        }
+
+        .ambient-glow {
+            position: fixed; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 0; pointer-events: none;
+        }
+
+        @keyframes twinkle { 0% { opacity: 0.4; transform: translateY(0); } 100% { opacity: 0.8; transform: translateY(-20px); } }
+
+        /* -----------------------------------------------------------
+           2. HERO SCROLL STAGE
+           ----------------------------------------------------------- */
+        .scroll-stage {
+            height: 450vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sticky-viewport {
+            position: sticky; top: 0;
+            height: 100vh; width: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            perspective: 1200px; overflow: hidden;
+        }
+
+        .hero-text {
+            position: absolute; 
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            text-align: center;
+            width: 100%;
+            pointer-events: none; 
+        }
+
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(5rem, 18vw, 14rem);
+            font-weight: 900;
+            font-style: italic;
+            line-height: 0.8;
+            color: #fff;
+            text-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            white-space: nowrap;
+            letter-spacing: -0.05em;
+        }
+
+        .hero-text p {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .card-container {
+            width: 90%; max-width: 1000px; aspect-ratio: 16/9;
+            position: relative;
+            transform-style: preserve-3d;
+            border-radius: 20px;
+            z-index: 20;
+        }
+
+        .card-inner {
+            width: 100%; height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 80px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        
+        .card-inner img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* -----------------------------------------------------------
+           3. POWER RIBBON (MARQUEE)
+           ----------------------------------------------------------- */
+        .marquee-container {
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            padding: 15px 0;
+            position: relative; z-index: 25;
+            transform: rotate(-2deg) scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 170, 0, 0.4);
+            margin: -50px 0 60px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scrollText 20s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem; font-weight: 900;
+            margin: 0 30px; text-transform: uppercase;
+            color: #0f0c29;
+        }
+        
+        @keyframes scrollText { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* -----------------------------------------------------------
+           4. ORBIT GALAXY
+           ----------------------------------------------------------- */
+        .orbit-section {
+            position: relative; z-index: 20;
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            overflow: hidden;
+            padding: 50px 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .orbit-header {
+            text-align: center; margin-bottom: 20px; z-index: 30;
+            position: relative;
+        }
+        .orbit-header h2 { font-family: 'Playfair Display'; font-size: 3.5rem; color: #fff; margin-bottom: 5px; }
+        .orbit-header p { font-size: 1.1rem; color: var(--gold); letter-spacing: 1px; }
+
+        .universe {
+            position: relative; width: 100%; height: 800px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .sun-btn {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff, var(--gold));
+            box-shadow: 0 0 60px var(--gold-glow);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display'; font-size: 2.5rem; font-weight: 800; color: #000;
+            cursor: pointer; z-index: 100;
+            transition: all 0.4s ease;
+            position: absolute;
+        }
+        .sun-btn:hover { transform: scale(1.1); box-shadow: 0 0 100px var(--gold-glow); }
+        .sun-btn span { font-size: 0.8rem; position: absolute; bottom: -30px; color: #fff; width: 150px; text-align: center; letter-spacing: 1px; font-family: 'Outfit';}
+
+        .bubble {
+            position: absolute;
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            font-size: 0.7rem; font-weight: 600; color: #fff;
+            padding: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 10;
+        }
+        .bubble:hover {
+            z-index: 50; transform: scale(1.3) !important;
+            background: rgba(255, 215, 0, 0.2); border-color: var(--gold);
+            box-shadow: 0 0 30px var(--gold);
+        }
+        .bubble.teacher { background: rgba(244, 63, 94, 0.3); border: 2px solid var(--rose); box-shadow: 0 0 40px var(--rose); z-index: 40; font-weight: 800; }
+
+        /* -----------------------------------------------------------
+           5. MEMORY WALL (WITH DELETE FUNCTION)
+           ----------------------------------------------------------- */
+        .memory-section {
+            background: #0a0a0a;
+            padding: 100px 20px;
+            position: relative; z-index: 20;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .memory-container { max-width: 1000px; margin: 0 auto; }
+
+        .memory-header { text-align: center; margin-bottom: 60px; }
+        .memory-header h2 { font-size: 3rem; font-family: 'Playfair Display'; margin-bottom: 10px; }
+        .memory-header p { color: #94a3b8; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* FORM */
+        .memory-form {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            display: flex; flex-direction: column; gap: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-row { display: flex; gap: 15px; }
+        
+        input, textarea {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Outfit'; font-size: 1rem;
+            outline: none; transition: 0.3s;
+        }
+        input:focus, textarea:focus { border-color: var(--gold); background: rgba(0,0,0,0.6); }
+        .name-input { flex: 1; }
+        textarea { width: 100%; height: 100px; resize: none; }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--gold), #ffaa00);
+            border: none; padding: 15px;
+            border-radius: 10px;
+            color: #000; font-weight: 800; cursor: pointer;
+            font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 170, 0, 0.3); }
+
+        /* GRID */
+        .wall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .note-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 25px; border-radius: 15px;
+            position: relative;
+            transition: 0.3s;
+        }
+        .note-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); border-color: var(--gold); }
+        
+        .note-header { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center;}
+        .note-name { font-weight: 700; color: var(--gold); font-size: 1.1rem; }
+        .note-body { font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; font-style: italic; }
+
+        /* DELETE BUTTON STYLE */
+        .delete-btn {
+            background: none; border: none; color: #ef4444; /* Red */
+            cursor: pointer; font-size: 0.9rem;
+            opacity: 0.5; transition: 0.2s;
+        }
+        .delete-btn:hover { opacity: 1; transform: scale(1.2); }
+
+        footer { text-align: center; padding: 80px 20px; color: #64748b; position: relative; z-index: 20; }
+
+        @media (max-width: 768px) {
+            .hero-text h1 { font-size: 5rem; }
+            .form-row { flex-direction: column; }
+            .universe { height: 600px; }
+            .bubble { width: 55px; height: 55px; font-size: 0.6rem; }
+            .marquee-item { font-size: 1.5rem; margin: 0 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+    <div class="ambient-glow"></div>
+
+    <!-- 1. HERO SCROLL -->
+    <div class="scroll-stage" id="scrollStage">
+        <div class="sticky-viewport">
+            
+            <div class="hero-text" id="heroText">
+                <p>THE LEGACY OF</p>
+                <h1>CLASS 9D</h1>
+            </div>
+
+            <div class="card-container" id="card3D">
+                <div class="card-inner">
+                    <img src="https://i.imgur.com/F5XHwV4.jpeg" alt="9D Family">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. POWER RIBBON -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span class="marquee-item">STRENGTH</span> •
+            <span class="marquee-item">LEGACY</span> •
+            <span class="marquee-item">MEMORIES</span> •
+            <span class="marquee-item">FRIENDSHIP</span> •
+            <span class="marquee-item">POWER</span> •
+            <span class="marquee-item">9D FOREVER</span> •
+            <span class="marquee-item">UNITY</span> •
+            <span class="marquee-item">STRENGTH</span> •
+            <span class="marquee-item">LEGACY</span> •
+            <span class="marquee-item">MEMORIES</span> •
+            <span class="marquee-item">FRIENDSHIP</span> •
+            <span class="marquee-item">POWER</span> •
+            <span class="marquee-item">9D FOREVER</span> •
+            <span class="marquee-item">UNITY</span> •
+        </div>
+    </div>
+
+    <!-- 3. ORBIT SECTION -->
+    <section class="orbit-section">
+        <div class="orbit-header">
+            <h2>The Family Tree</h2>
+            <p>Individually Unique, Together Complete.</p>
+        </div>
+
+        <div class="universe" id="universe">
+            <div class="sun-btn" id="sunBtn">
+                9D
+                <span>Click to Unite</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. MEMORY WALL -->
+    <section class="memory-section">
+        <div class="memory-container">
+            <div class="memory-header">
+                <h2>Our Memory Wall</h2>
+                <p>Leave a note. Click the Trash Icon to delete.</p>
+            </div>
+
+            <div class="memory-form">
+                <div class="form-row">
+                    <input type="text" id="inputName" class="name-input" placeholder="Your Name" maxlength="20">
+                    <input type="text" id="inputTag" placeholder="One word (e.g. Chaos)" maxlength="15">
+                </div>
+                <textarea id="inputMsg" placeholder="Write your favorite memory..."></textarea>
+                <button class="submit-btn" onclick="addMemory()">Post Note</button>
+            </div>
+
+            <div class="wall-grid" id="wallGrid">
+                <!-- Notes appear here -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Made with ❤️ by GORDON from Class 9D • 2025 - 2026</p>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- NAMES CONFIG ---
+            const TEACHER_NAME = "SHAHEERA MaM"; 
+            const STUDENT_NAMES = [
+                "PRANAV", "NISHAN", "PRANAV", "RANZIL", "SOORYA", "SWARIT", 
+                "AADHIDEV", "ABHINAV", "ALBERT", "DHRUV", "GHAYAS", "HARISARAN", 
+                "JOHAAN", "MADHAV", "PRANAV", "SREEPADH", "SARANG", "NISHANT", 
+                "ABHINAV", "FAIZAN", "AKASH", "ANEES", "BENET", "DANIEL", 
+                "DHRUV", "GAUTAM", "GORDON", "HENOK", "MANSAHEJ", "RAZIN", 
+                "NIHAL", "HADI", "PAVAN"
+            ];
+
+            // --- 1. MEMORY WALL LOGIC (WITH DELETE) ---
+            const wallGrid = document.getElementById('wallGrid');
+            const inputName = document.getElementById('inputName');
+            const inputTag = document.getElementById('inputTag');
+            const inputMsg = document.getElementById('inputMsg');
+
+            // Load from LocalStorage
+            let storedMemories = JSON.parse(localStorage.getItem('9d_memories')) || [];
+            
+            // Initial Render
+            renderMemories();
+
+            window.addMemory = function() {
+                const name = inputName.value.trim();
+                const msg = inputMsg.value.trim();
+
+                if(!name || !msg) { alert("Please fill in name and memory!"); return; }
+
+                // Add to start of array
+                storedMemories.unshift({ name, msg });
+                saveAndRender();
+
+                inputName.value = '';
+                inputTag.value = '';
+                inputMsg.value = '';
+            }
+
+            window.deleteMemory = function(index) {
+                if(confirm("Delete this note permanently?")) {
+                    storedMemories.splice(index, 1);
+                    saveAndRender();
+                }
+            }
+
+            function saveAndRender() {
+                localStorage.setItem('9d_memories', JSON.stringify(storedMemories));
+                renderMemories();
+            }
+
+            function renderMemories() {
+                wallGrid.innerHTML = ''; // Clear current
+                if(storedMemories.length === 0) {
+                    wallGrid.innerHTML = '<p style="text-align:center; color:#555; grid-column:1/-1">No memories yet. Be the first!</p>';
+                    return;
+                }
+                storedMemories.forEach((mem, index) => {
+                    const card = document.createElement('div');
+                    card.classList.add('note-card');
+                    card.innerHTML = `
+                        <div class="note-header">
+                            <span class="note-name">${mem.name}</span>
+                            <button class="delete-btn" onclick="deleteMemory(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="note-body">"${mem.msg}"</div>
+                    `;
+                    wallGrid.appendChild(card);
+                });
+            }
+
+            // --- 2. ORBIT LOGIC ---
+            const universe = document.getElementById('universe');
+            const sunBtn = document.getElementById('sunBtn');
+            let bubbles = [];
+            let isAligned = false;
+
+            const allMembers = [{ name: TEACHER_NAME, type: 'teacher' }];
+            STUDENT_NAMES.forEach(name => allMembers.push({ name: name, type: 'student' }));
+
+            allMembers.forEach(member => {
+                const b = document.createElement('div');
+                b.classList.add('bubble');
+                if(member.type === 'teacher') b.classList.add('teacher');
+                b.innerText = member.name;
+                universe.appendChild(b);
+                bubbles.push(b);
+            });
+
+            function arrangeSpiral() {
+                const spacing = window.innerWidth < 768 ? 40 : 60; 
+                const startRadius = window.innerWidth < 768 ? 80 : 130; 
+                bubbles.forEach((b, i) => {
+                    const angle = i * 137.5; 
+                    const radius = startRadius + (spacing * Math.sqrt(i));
+                    const theta = angle * (Math.PI / 180);
+                    b.style.transform = `translate(${radius * Math.cos(theta)}px, ${radius * Math.sin(theta)}px)`;
+                });
+            }
+
+            function arrangeCircle() {
+                const total = bubbles.length;
+                const radius = Math.min(window.innerWidth, window.innerHeight) * 0.35;
+                bubbles.forEach((b, i) => {
+                    const angle = (i * (360 / total)) * (Math.PI / 180);
+                    b.style.transform = `translate(${radius * Math.cos(angle)}px, ${radius * Math.sin(angle)}px)`;
+                });
+            }
+
+            sunBtn.addEventListener('click', () => {
+                if(isAligned) {
+                    arrangeSpiral();
+                    sunBtn.style.transform = "scale(1)";
+                } else {
+                    arrangeCircle();
+                    sunBtn.style.transform = "rotate(360deg) scale(1.1)";
+                }
+                isAligned = !isAligned;
+            });
+            
+            setTimeout(arrangeSpiral, 100);
+            window.addEventListener('resize', () => isAligned ? arrangeCircle() : arrangeSpiral());
+
+            // --- 3. SCROLL ---
+            const stage = document.getElementById('scrollStage');
+            const card = document.getElementById('card3D');
+            const text = document.getElementById('heroText');
+
+            function handleScroll() {
+                if(!stage) return;
+                const rect = stage.getBoundingClientRect();
+                const viewH = window.innerHeight;
+                const dist = stage.offsetHeight - viewH;
+                const scrolled = -rect.top;
+                let p = Math.max(0, Math.min(1, scrolled / dist));
+
+                const textOpacity = 1 - (p * 4); 
+                const textScale = 1 + (p * 2); 
+                const textBlur = p * 20;
+
+                text.style.opacity = Math.max(0, textOpacity);
+                text.style.filter = `blur(${textBlur}px)`;
+                text.style.transform = `translate(-50%, -50%) scale(${textScale})`;
+
+                const rotate = 60 - (p * 60);
+                const scale = 0.5 + (p * 0.5);
+                const y = 300 - (p * 300);
+                const opacity = p * 2; 
+
+                card.style.transform = `rotateX(${rotate}deg) scale(${scale}) translateY(${y}px)`;
+                card.style.opacity = Math.min(1, opacity);
+            }
+
+            window.addEventListener('scroll', () => requestAnimationFrame(handleScroll));
+            handleScroll();
+        });
+    </script>
+</body>
+</html>
